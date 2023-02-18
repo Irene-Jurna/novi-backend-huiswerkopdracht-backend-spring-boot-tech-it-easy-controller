@@ -1,6 +1,7 @@
 package nl.novi.techItEasy.controllers;
 
 import nl.novi.techItEasy.exceptions.IndexOutOfBoundsException;
+import nl.novi.techItEasy.exceptions.InvalidNameException;
 import nl.novi.techItEasy.exceptions.RecordNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +18,12 @@ public class ExceptionController {
 
     @ExceptionHandler(value = IndexOutOfBoundsException.class)
     public ResponseEntity<Object> exception(IndexOutOfBoundsException exception) {
-//        Statische optie: return new ResponseEntity<>("De ID van deze tv is niet gevonden", HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = InvalidNameException.class)
+    public ResponseEntity<Object> exception(InvalidNameException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.REQUEST_HEADER_FIELDS_TOO_LARGE);
     }
 
 }
