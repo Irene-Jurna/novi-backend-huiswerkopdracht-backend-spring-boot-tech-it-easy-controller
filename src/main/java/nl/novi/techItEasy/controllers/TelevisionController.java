@@ -1,5 +1,6 @@
 package nl.novi.techItEasy.controllers;
 
+import nl.novi.techItEasy.exceptions.RecordNotFoundException;
 import nl.novi.techItEasy.models.Television;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("televisions")
 public class TelevisionController {
+    // Hetzelfde is return ResponseEntity.ok(body: "television"). Shortcut. (Builder pattern, zelf googlen)
     private List<Television> televisionList = new ArrayList<>();
 
     @GetMapping("")
@@ -18,12 +20,14 @@ public class TelevisionController {
         return new ResponseEntity<>(televisionList, HttpStatus.OK);
     }
 
-    @GetMapping("{id}")
+    // Hier zou indexoutofboundsexception logischer zijn?
+    @GetMapping("/{id}")
     public ResponseEntity<Television> getTelevisionById(@PathVariable int id) {
-        if (id >= 0 && id > televisionList.size()) {
-            return new ResponseEntity<>(televisionList.get(id), HttpStatus.OK);
+        if (id >= televisionList.size()) {
+            throw new RecordNotFoundException("This tv does not exist");
+            //            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         } else {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(televisionList.get(id), HttpStatus.OK);
         }
     }
 
@@ -33,16 +37,18 @@ public class TelevisionController {
         return new ResponseEntity<>(tv, HttpStatus.CREATED);
     }
 
+    // In huiswerkles gebruiken ze hier @RequestParam. Waarom dit verschil?
     @PutMapping("/{id}")
     public ResponseEntity<Television> updateTelevision(@PathVariable int id, @RequestBody Television tv) {
         if (id >= 0 && id > televisionList.size()) {
             televisionList.set(id, tv);
             return new ResponseEntity<>(tv, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
+    // Deze is op basis van naam, in bonusopdracht moet het op basis van id
     @DeleteMapping("")
     public ResponseEntity<Television> removeTelevision(@RequestParam String name, @RequestBody Television tv) {
         Television televisionToBeDeleted = null;
@@ -55,7 +61,7 @@ public class TelevisionController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             televisionList.remove(televisionToBeDeleted);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
     }
 
