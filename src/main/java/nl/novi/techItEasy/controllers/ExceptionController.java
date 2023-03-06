@@ -23,7 +23,7 @@ public class ExceptionController {
 
     @ExceptionHandler(value = InvalidNameException.class)
     public ResponseEntity<Object> exception(InvalidNameException exception) {
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.REQUEST_HEADER_FIELDS_TOO_LARGE);
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
 }
