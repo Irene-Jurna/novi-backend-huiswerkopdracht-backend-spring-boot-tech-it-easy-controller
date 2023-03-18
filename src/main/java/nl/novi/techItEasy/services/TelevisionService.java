@@ -40,17 +40,28 @@ public class TelevisionService {
         return tvDtoList;
     }
 
+    // Toegevoegd bij nakijken, overgenomen uit uitwerkingen (inclusief extra regel in Repository)
+    public List<TelevisionDto> getTelevisionByBrand(String brand) {
+        List<Television> tvList = repos.findAllTelevisionsByBrandEqualsIgnoreCase(brand);
+        List<TelevisionDto> tvDtoList = new ArrayList<>();
+        for (Television tv : tvList) {
+            TelevisionDto tvDto = televisionToDto(tv);
+            tvDtoList.add(tvDto);
+        }
+        return tvDtoList;
+    }
+
     public TelevisionDto getTelevisionById(Long id) {
         // Alternatieve manier uit les Robert-Jan
 //        Television tv = repos.findById(id).orElseThrow(() -> new RecordNotFoundException("Tv id not found"));
 
         Optional<Television> t = repos.findById(id);
+        // Deze if-statement kan ook andersom met t.isPresent
         if (t.isEmpty()) {
             throw new RecordNotFoundException("Television not found");
         } else {
             Television tv = t.get();
-            TelevisionDto tvDto = televisionToDto(tv);
-            return tvDto;
+            return televisionToDto(tv);
         }
     }
 
@@ -77,6 +88,7 @@ public class TelevisionService {
             tv.setBrand(tvForUpdate.brand);
             tv.setName(tvForUpdate.name);
             Television returnTelevision = repos.save(tv);
+            // Onderste twee stappen kunnen worden samengevoegd in return televisionToDto(returnTelevision);
             TelevisionDto tvDto = televisionToDto(returnTelevision);
             return tvDto;
         }

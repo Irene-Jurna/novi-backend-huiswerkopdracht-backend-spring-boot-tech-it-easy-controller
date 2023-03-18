@@ -1,5 +1,6 @@
 package nl.novi.techItEasy.controllers;
 
+import jakarta.validation.Valid;
 import nl.novi.techItEasy.dtos.TelevisionDto;
 import nl.novi.techItEasy.models.Television;
 import nl.novi.techItEasy.services.TelevisionService;
@@ -13,6 +14,8 @@ import java.util.List;
 @RequestMapping("televisions")
 public class TelevisionController {
     //    private List<Television> televisionList = new ArrayList<>();
+
+    // We importeren de Service
     private final TelevisionService service;
 
     public TelevisionController(TelevisionService service) {
@@ -27,7 +30,7 @@ public class TelevisionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TelevisionDto> getTelevisionById(@PathVariable Long id) {
+    public ResponseEntity<TelevisionDto> getTelevisionById(@Valid @PathVariable Long id) {
         TelevisionDto tv = service.getTelevisionById(id);
         return new ResponseEntity<>(tv, HttpStatus.OK);
     }
@@ -39,13 +42,13 @@ public class TelevisionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TelevisionDto> updateTelevision(@PathVariable Long id, @RequestBody TelevisionDto tv) {
+    public ResponseEntity<TelevisionDto> updateTelevision(@Valid @PathVariable Long id, @RequestBody TelevisionDto tv) {
         TelevisionDto tvDto = service.updateTelevision(id, tv);
         return new ResponseEntity<>(tvDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Television> removeTelevisionBasedOnId(@PathVariable Long id) {
+    public ResponseEntity<Television> removeTelevisionBasedOnId(@Valid @PathVariable Long id) {
         service.deleteTelevision(id);
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }

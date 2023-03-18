@@ -4,8 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 
 public class TelevisionDto {
 
-    // Validator dependency uit H8.1
-
     public Long id;
 
     @NotBlank

@@ -1,23 +1,21 @@
 package nl.novi.techItEasy.dtos;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 public class TelevisionInputDto {
     public Long id;
 
-    @NotBlank
+    // In uitwerkingen wordt @NotNull gebruikt
+    @NotBlank(message = "Type is required")
     public String type;
 
-    @NotBlank
+    @NotNull(message = "Brand is required")
     public String brand;
 
-    @NotBlank
+    @Size(max = 20, message = "Name must be between 0-20 characters")
     public String name;
 
-    @Min(value=0)
+    @Positive
     public Double price;
 
     @Size(min=1, max=1000)
@@ -33,8 +31,9 @@ public class TelevisionInputDto {
     public Boolean bluetooth;
     public Boolean ambiLight;
 
-    @NotNull
+    @PositiveOrZero
     public Integer originalStock;
 
+    @Min(value=0)
     public Integer sold;
 }
