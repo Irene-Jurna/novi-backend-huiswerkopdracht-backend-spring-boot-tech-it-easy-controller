@@ -8,12 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("televisions")
 public class TelevisionController {
-    //    private List<Television> televisionList = new ArrayList<>();
+//        private List<Television> televisionList = new ArrayList<>();
 
     // We importeren de Service
     private final TelevisionService service;
@@ -24,9 +25,10 @@ public class TelevisionController {
 
     @GetMapping("")
     public ResponseEntity<List<TelevisionDto>> getAllTelevisions() {
-        // Een andere return kan zijn: ResponseEntity.ok(body: "television")
-        List<TelevisionDto> televisionList = service.getTelevisions();
-        return new ResponseEntity<>(televisionList, HttpStatus.OK);
+        // Een andere return kan zijn: ResponseEntity<>(televisionList, HttpStatus.OK);
+        List<TelevisionDto> televisionList;
+        televisionList = service.getTelevisions();
+        return ResponseEntity.ok().body(televisionList);
     }
 
     @GetMapping("/{id}")
@@ -48,7 +50,7 @@ public class TelevisionController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Television> removeTelevisionBasedOnId(@Valid @PathVariable Long id) {
+    public ResponseEntity<Television> removeTelevisionBasedOnId(@PathVariable Long id) {
         service.deleteTelevision(id);
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }

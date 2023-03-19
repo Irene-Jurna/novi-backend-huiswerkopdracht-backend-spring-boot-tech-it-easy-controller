@@ -25,13 +25,26 @@ public class TelevisionService {
         tv.setType(tvDto.type);
         tv.setBrand(tvDto.brand);
         tv.setName(tvDto.name);
+        tv.setPrice(tvDto.price);
+        tv.setAvailableSize(tvDto.availableSize);
+        tv.setRefreshRate(tvDto.refreshRate);
+        tv.setScreenType(tvDto.screenType);
+        tv.setScreenQuality(tvDto.screenQuality);
+        tv.setSmartTv(tvDto.smartTv);
+        tv.setWifi(tvDto.wifi);
+        tv.setVoiceControl(tvDto.voiceControl);
+        tv.setHdr(tvDto.hdr);
+        tv.setBluetooth(tvDto.bluetooth);
+        tv.setAmbiLight(tvDto.ambiLight);
+        tv.setOriginalStock(tvDto.originalStock);
+        tv.setSold(tvDto.sold);
         repos.save(tv);
         return tvDto.getId();
     }
 
-    // Moet dit List zijn of List<TelevisionDto> ?
+    // Moet dit List zijn of List<TelevisionDto>? En Iterable<Television> of List<Television>?
     public List<TelevisionDto> getTelevisions() {
-        Iterable<Television> tvList = repos.findAll();
+        List<Television> tvList = (List<Television>) repos.findAll();
         List<TelevisionDto> tvDtoList = new ArrayList<>();
         for (Television tv : tvList) {
             TelevisionDto tvDto = televisionToDto(tv);
@@ -71,6 +84,18 @@ public class TelevisionService {
         tvDto.type = tv.getType();
         tvDto.brand = tv.getBrand();
         tvDto.name = tv.getName();
+        tvDto.price = tv.getPrice();
+        tvDto.availableSize = tv.getAvailableSize();
+        tvDto.refreshRate = tv.getRefreshRate();
+        tvDto.screenType = tv.getScreenType();
+        tvDto.smartTv = tv.getSmartTv();
+        tvDto.wifi = tv.getWifi();
+        tvDto.voiceControl = tv.getVoiceControl();
+        tvDto.hdr = tv.getHdr();
+        tvDto.bluetooth = tv.getBluetooth();
+        tvDto.ambiLight = tv.getAmbiLight();
+        tvDto.originalStock = tv.getOriginalStock();
+        tvDto.sold = tv.getSold();
         return tvDto;
     }
 
@@ -84,9 +109,22 @@ public class TelevisionService {
             throw new RecordNotFoundException("Television not found");
         } else {
             Television tv = t.get();
-            tv.setType(tvForUpdate.name);
+            tv.setType(tvForUpdate.type);
             tv.setBrand(tvForUpdate.brand);
             tv.setName(tvForUpdate.name);
+            tv.setPrice(tvForUpdate.price);
+            tv.setAvailableSize(tvForUpdate.availableSize);
+            tv.setRefreshRate(tvForUpdate.refreshRate);
+            tv.setScreenType(tvForUpdate.screenType);
+            tv.setScreenQuality(tvForUpdate.screenQuality);
+            tv.setSmartTv(tvForUpdate.smartTv);
+            tv.setWifi(tvForUpdate.wifi);
+            tv.setVoiceControl(tvForUpdate.voiceControl);
+            tv.setHdr(tvForUpdate.hdr);
+            tv.setBluetooth(tvForUpdate.bluetooth);
+            tv.setAmbiLight(tvForUpdate.ambiLight);
+            tv.setOriginalStock(tvForUpdate.originalStock);
+            tv.setSold(tvForUpdate.sold);
             Television returnTelevision = repos.save(tv);
             // Onderste twee stappen kunnen worden samengevoegd in return televisionToDto(returnTelevision);
             TelevisionDto tvDto = televisionToDto(returnTelevision);

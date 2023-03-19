@@ -1,6 +1,7 @@
 package nl.novi.techItEasy.dtos;
 
 import jakarta.validation.constraints.NotBlank;
+import nl.novi.techItEasy.models.RemoteController;
 
 public class TelevisionDto {
 
@@ -156,4 +157,5 @@ public class TelevisionDto {
     public void setSold(Integer sold) {
         this.sold = sold;
     }
+
 }

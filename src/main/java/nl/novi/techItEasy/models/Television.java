@@ -1,13 +1,12 @@
 package nl.novi.techItEasy.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "televisions")
 public class Television {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     // Primary key
     private Long id;
 
@@ -27,6 +26,11 @@ public class Television {
     private Boolean ambiLight;
     private Integer originalStock;
     private Integer sold;
+
+    // Cascade komt uit EdHub H14, volgens mij zorgt dat ervoor dat je bij een delete ook de gerelateerde info delete
+    // In huiswerkles werd private voor de variabele gezet. In H14 niks (public?)
+    @OneToOne(cascade = CascadeType.ALL)
+    private RemoteController remote;
 
     public Long getId() {
         return id;
@@ -96,6 +100,10 @@ public class Television {
         return sold;
     }
 
+    public RemoteController getRemote() {
+        return remote;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -162,5 +170,9 @@ public class Television {
 
     public void setSold(Integer sold) {
         this.sold = sold;
+    }
+
+    public void setRemote(RemoteController remote) {
+        this.remote = remote;
     }
 }
