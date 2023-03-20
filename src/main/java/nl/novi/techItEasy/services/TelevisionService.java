@@ -1,9 +1,10 @@
 package nl.novi.techItEasy.services;
 
 import nl.novi.techItEasy.dtos.TelevisionDto;
-import nl.novi.techItEasy.dtos.TelevisionInputDto;
 import nl.novi.techItEasy.exceptions.RecordNotFoundException;
+import nl.novi.techItEasy.models.RemoteController;
 import nl.novi.techItEasy.models.Television;
+import nl.novi.techItEasy.repositories.RemoteControllerRepository;
 import nl.novi.techItEasy.repositories.TelevisionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,9 +16,11 @@ import java.util.Optional;
 @Service
 public class TelevisionService {
     private final TelevisionRepository repos;
+    private final RemoteControllerRepository remoteRepos;
 
-    public TelevisionService(TelevisionRepository repos) {
+    public TelevisionService(TelevisionRepository repos, RemoteControllerRepository remoteRepos) {
         this.repos = repos;
+        this.remoteRepos = remoteRepos;
     }
 
     public Long createTelevision(TelevisionDto tvDto) {
@@ -38,8 +41,18 @@ public class TelevisionService {
         tv.setAmbiLight(tvDto.ambiLight);
         tv.setOriginalStock(tvDto.originalStock);
         tv.setSold(tvDto.sold);
+
+        if (tvDto.remoteId != null) {
+            Optional<RemoteController> r = remoteRepos.findById(tvDto.remoteId);
+            // Deze if-statement kan ook andersom met t.isPresent
+            if (r.isPresent()) {
+                RemoteController remote = r.get();
+                tv.setRemote(remote);
+            }
+        }
         repos.save(tv);
-        return tvDto.getId();
+        // tvToDto aanroepen --> dan hoef ik geen Long te returnen, maar een DTO (maar Long is prima)
+        return tv.getId();
     }
 
     // Moet dit List zijn of List<TelevisionDto>? En Iterable<Television> of List<Television>?
@@ -109,7 +122,10 @@ public class TelevisionService {
             throw new RecordNotFoundException("Television not found");
         } else {
             Television tv = t.get();
-            tv.setType(tvForUpdate.type);
+            // Null check eromheen zetten, zodat je een enkele waarde kunt updaten
+            if(tvForUpdate.type != null) {
+                tv.setType(tvForUpdate.type);
+            }
             tv.setBrand(tvForUpdate.brand);
             tv.setName(tvForUpdate.name);
             tv.setPrice(tvForUpdate.price);

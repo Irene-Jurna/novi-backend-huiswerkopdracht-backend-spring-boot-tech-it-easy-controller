@@ -1,9 +1,6 @@
 package nl.novi.techItEasy.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "ci-modules")
@@ -15,6 +12,9 @@ public class CIModule {
     private String name;
     private String type;
     private Double price;
+
+    @ManyToOne
+    private Television tv;
 
     public Long getId() {
         return id;

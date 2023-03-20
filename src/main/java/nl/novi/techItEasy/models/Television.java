@@ -2,6 +2,8 @@ package nl.novi.techItEasy.models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "televisions")
 public class Television {
@@ -31,6 +33,20 @@ public class Television {
     // In huiswerkles werd private voor de variabele gezet. In H14 niks (public?)
     @OneToOne(cascade = CascadeType.ALL)
     private RemoteController remote;
+
+    @OneToMany(mappedBy = "tv")
+    private List<CIModule> ciModules;
+
+    @OneToMany(mappedBy = "tv")
+    private List<TelevisionsWallbrackets> tvWbList;
+
+    @ManyToMany
+    @JoinTable(
+            name = "tussentabel_televisions_wallbrackets",
+            joinColumns = @JoinColumn(name = "tv_id"),
+            inverseJoinColumns = @JoinColumn(name = "wb_id")
+    )
+    private List<WallBracket> wallBrackets;
 
     public Long getId() {
         return id;
@@ -175,4 +191,5 @@ public class Television {
     public void setRemote(RemoteController remote) {
         this.remote = remote;
     }
+
 }

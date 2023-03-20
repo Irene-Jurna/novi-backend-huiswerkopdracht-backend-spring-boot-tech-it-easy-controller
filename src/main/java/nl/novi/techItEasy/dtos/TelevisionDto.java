@@ -25,6 +25,9 @@ public class TelevisionDto {
     public Boolean ambiLight;
     public Integer originalStock;
     public Integer sold;
+    public Long remoteId;
+
+    // bij public hoeven geen getters en setters
 
     public Long getId() {
         return id;

@@ -1,10 +1,11 @@
 package nl.novi.techItEasy.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
+@Table(name = "wallbrackets")
 public class WallBracket {
     @Id
     @GeneratedValue
@@ -14,6 +15,12 @@ public class WallBracket {
     private Boolean ajustable;
     private String name;
     private Double price;
+
+    @ManyToMany(mappedBy = "wallBrackets")
+    private List<Television> tvs;
+
+    @OneToMany(mappedBy = "wallBracket")
+    private List<TelevisionsWallbrackets> tvWbList;
 
     public Long getId() {
         return id;
