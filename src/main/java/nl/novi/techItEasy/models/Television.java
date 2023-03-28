@@ -30,7 +30,7 @@ public class Television {
     private Integer sold;
 
     // Cascade komt uit EdHub H14, volgens mij zorgt dat ervoor dat je bij een delete ook de gerelateerde info delete
-    // In huiswerkles werd private voor de variabele gezet. In H14 niks (public?)
+    // In huiswerkles werd private voor de variabele gezet. In H14 niks (package private)
     @OneToOne(cascade = CascadeType.ALL)
     private RemoteController remote;
 
