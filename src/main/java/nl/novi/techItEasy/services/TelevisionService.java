@@ -9,7 +9,6 @@ import nl.novi.techItEasy.repositories.TelevisionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.rmi.Remote;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,24 +24,7 @@ public class TelevisionService {
     }
 
     public Long createTelevision(TelevisionDto tvDto) {
-        Television tv = new Television();
-        tv.setType(tvDto.type);
-        tv.setBrand(tvDto.brand);
-        tv.setName(tvDto.name);
-        tv.setPrice(tvDto.price);
-        tv.setAvailableSize(tvDto.availableSize);
-        tv.setRefreshRate(tvDto.refreshRate);
-        tv.setScreenType(tvDto.screenType);
-        tv.setScreenQuality(tvDto.screenQuality);
-        tv.setSmartTv(tvDto.smartTv);
-        tv.setWifi(tvDto.wifi);
-        tv.setVoiceControl(tvDto.voiceControl);
-        tv.setHdr(tvDto.hdr);
-        tv.setBluetooth(tvDto.bluetooth);
-        tv.setAmbiLight(tvDto.ambiLight);
-        tv.setOriginalStock(tvDto.originalStock);
-        tv.setSold(tvDto.sold);
-
+        Television tv = dtoToTelevision(tvDto);
         if (tvDto.remoteId != null) {
             Optional<RemoteController> r = remoteRepos.findById(tvDto.remoteId);
             // Deze if-statement kan ook andersom met t.isPresent
@@ -52,13 +34,13 @@ public class TelevisionService {
             }
         }
         repos.save(tv);
-        // tvToDto aanroepen --> dan hoef ik geen Long te returnen, maar een DTO (maar Long is prima)
+        // Alternatieve oplossing: tvToDto aanroepen met return televisionToDto(tv); --> dan hoef ik geen Long te returnen, maar een DTO (maar Long is prima).
         return tv.getId();
     }
 
     // Moet dit List zijn of List<TelevisionDto>? En Iterable<Television> of List<Television>?
     public List<TelevisionDto> getTelevisions() {
-        List<Television> tvList = (List<Television>) repos.findAll();
+        List<Television> tvList = repos.findAll();
         List<TelevisionDto> tvDtoList = new ArrayList<>();
         for (Television tv : tvList) {
             TelevisionDto tvDto = televisionToDto(tv);
@@ -78,10 +60,10 @@ public class TelevisionService {
         return tvDtoList;
     }
 
+    // Hier straks nog check aan toevoegen of er CiModules en RemoteControllers bij de tv horen
     public TelevisionDto getTelevisionById(Long id) {
         // Alternatieve manier uit les Robert-Jan
 //        Television tv = repos.findById(id).orElseThrow(() -> new RecordNotFoundException("Tv id not found"));
-
         Optional<Television> t = repos.findById(id);
         // Deze if-statement kan ook andersom met t.isPresent
         if (t.isEmpty()) {
@@ -89,6 +71,36 @@ public class TelevisionService {
         } else {
             Television tv = t.get();
             return televisionToDto(tv);
+        }
+    }
+
+    public void deleteTelevision(@RequestBody Long id) {
+        repos.deleteById(id);
+    }
+
+    public TelevisionDto updateTelevision(Long id, TelevisionDto tvForUpdate) {
+        Optional<Television> t = repos.findById(id);
+        if (t.isEmpty()) {
+            throw new RecordNotFoundException("Television not found");
+        } else {
+            Television tv = t.get();
+            Television tv1 = dtoToTelevision(tvForUpdate);
+            Television returnTelevision = repos.save(tv1);
+            return televisionToDto(returnTelevision);
+        }
+    }
+
+    public void assignRemoteControllerToTelevision(Long id, Long remoteControllerId) {
+        Optional<Television> tv = repos.findById(id);
+        Optional<RemoteController> remote = remoteRepos.findById(remoteControllerId);
+
+        if (tv.isPresent() && remote.isPresent()) {
+            Television t = tv.get();
+            RemoteController r = remote.get();
+            t.setRemote(r);
+            repos.save(t);
+        } else {
+            throw new RecordNotFoundException();
         }
     }
 
@@ -113,53 +125,73 @@ public class TelevisionService {
         return tvDto;
     }
 
-    public void deleteTelevision(@RequestBody Long id) {
-        repos.deleteById(id);
-    }
+    public Television dtoToTelevision(TelevisionDto tvDto) {
+        Television tv = new Television();
 
-    public TelevisionDto updateTelevision(Long id, TelevisionDto tvForUpdate) {
-        Optional<Television> t = repos.findById(id);
-        if (t.isEmpty()) {
-            throw new RecordNotFoundException("Television not found");
-        } else {
-            Television tv = t.get();
-            // Null check eromheen zetten, zodat je een enkele waarde kunt updaten
-            if(tvForUpdate.type != null) {
-                tv.setType(tvForUpdate.type);
-            }
-            tv.setBrand(tvForUpdate.brand);
-            tv.setName(tvForUpdate.name);
-            tv.setPrice(tvForUpdate.price);
-            tv.setAvailableSize(tvForUpdate.availableSize);
-            tv.setRefreshRate(tvForUpdate.refreshRate);
-            tv.setScreenType(tvForUpdate.screenType);
-            tv.setScreenQuality(tvForUpdate.screenQuality);
-            tv.setSmartTv(tvForUpdate.smartTv);
-            tv.setWifi(tvForUpdate.wifi);
-            tv.setVoiceControl(tvForUpdate.voiceControl);
-            tv.setHdr(tvForUpdate.hdr);
-            tv.setBluetooth(tvForUpdate.bluetooth);
-            tv.setAmbiLight(tvForUpdate.ambiLight);
-            tv.setOriginalStock(tvForUpdate.originalStock);
-            tv.setSold(tvForUpdate.sold);
-            Television returnTelevision = repos.save(tv);
-            // Onderste twee stappen kunnen worden samengevoegd in return televisionToDto(returnTelevision);
-            TelevisionDto tvDto = televisionToDto(returnTelevision);
-            return tvDto;
+        if (tvDto.type != null) {
+            tv.setType(tvDto.type);
         }
-    }
 
-    public void assignRemoteControllerToTelevision(Long id, Long remoteControllerId) {
-        Optional<Television> tv = repos.findById(id);
-        Optional<RemoteController> remote = remoteRepos.findById(remoteControllerId);
-
-        if(tv.isPresent() && remote.isPresent()) {
-            Television t = tv.get();
-            RemoteController r = remote.get();
-            t.setRemote(r);
-            repos.save(t);
-        } else {
-            throw new RecordNotFoundException();
+        if (tvDto.brand != null) {
+            tv.setBrand(tvDto.brand);
         }
+
+        if (tvDto.name != null) {
+            tv.setName(tvDto.name);
+        }
+
+        if (tvDto.price != null) {
+            tv.setPrice(tvDto.price);
+        }
+
+        if (tvDto.availableSize != null) {
+            tv.setAvailableSize(tvDto.availableSize);
+        }
+
+        if (tvDto.refreshRate != null) {
+            tv.setRefreshRate(tvDto.refreshRate);
+        }
+
+        if (tvDto.screenType != null) {
+            tv.setScreenType(tvDto.screenType);
+        }
+
+        if (tvDto.screenQuality != null) {
+            tv.setScreenQuality(tvDto.screenQuality);
+        }
+
+        if (tvDto.smartTv != null) {
+            tv.setSmartTv(tvDto.smartTv);
+        }
+
+        if (tvDto.wifi != null) {
+            tv.setWifi(tvDto.wifi);
+        }
+
+        if (tvDto.voiceControl != null) {
+            tv.setVoiceControl(tvDto.voiceControl);
+        }
+
+        if (tvDto.hdr != null) {
+            tv.setHdr(tvDto.hdr);
+        }
+
+        if (tvDto.bluetooth != null) {
+            tv.setBluetooth(tvDto.bluetooth);
+        }
+
+        if (tvDto.ambiLight != null) {
+            tv.setAmbiLight(tvDto.ambiLight);
+        }
+
+        if (tvDto.originalStock != null) {
+            tv.setOriginalStock(tvDto.originalStock);
+        }
+
+        if (tvDto.sold != null) {
+            tv.setSold(tvDto.sold);
+        }
+        return tv;
     }
+
 }
