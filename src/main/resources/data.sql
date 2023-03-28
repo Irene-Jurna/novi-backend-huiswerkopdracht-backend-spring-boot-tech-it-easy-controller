@@ -1,0 +1,1 @@
+insert into televisions(id, type, brand, name, price, available_Size, refresh_Rate, screen_Type, screen_Quality, smart_Tv, wifi, voice_Control, hdr, bluetooth, ambi_Light, original_Stock, sold) values(1001, '55CS6LA', 'LG', 'OLED', '1199', '55', '100', 'OLED', 'Uitstekend', 'true', 'true', 'false', 'true', 'true', 'false', '35', '5')
