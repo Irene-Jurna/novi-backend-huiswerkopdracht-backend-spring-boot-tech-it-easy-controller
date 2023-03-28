@@ -122,6 +122,11 @@ public class TelevisionService {
         tvDto.ambiLight = tv.getAmbiLight();
         tvDto.originalStock = tv.getOriginalStock();
         tvDto.sold = tv.getSold();
+
+        if(tv.getRemote() != null) {
+            tvDto.setRemoteId(tv.getRemote().getId());
+        }
+
         return tvDto;
     }
 
