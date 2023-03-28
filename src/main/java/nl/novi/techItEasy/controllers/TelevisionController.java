@@ -55,4 +55,9 @@ public class TelevisionController {
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
+    @PutMapping("{id}/remote")
+    public ResponseEntity<Object> assignRemoteControllerToTelevision(@PathVariable("id") Long id, @Valid @RequestBody TelevisionDto remoteId) {
+        service.assignRemoteControllerToTelevision(id, remoteId.remoteId);
+        return ResponseEntity.noContent().build();
+    }
 }

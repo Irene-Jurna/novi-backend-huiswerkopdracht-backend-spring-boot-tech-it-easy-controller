@@ -9,6 +9,7 @@ import nl.novi.techItEasy.repositories.TelevisionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.rmi.Remote;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -148,4 +149,17 @@ public class TelevisionService {
         }
     }
 
+    public void assignRemoteControllerToTelevision(Long id, Long remoteControllerId) {
+        Optional<Television> tv = repos.findById(id);
+        Optional<RemoteController> remote = remoteRepos.findById(remoteControllerId);
+
+        if(tv.isPresent() && remote.isPresent()) {
+            Television t = tv.get();
+            RemoteController r = remote.get();
+            t.setRemote(r);
+            repos.save(t);
+        } else {
+            throw new RecordNotFoundException();
+        }
+    }
 }
