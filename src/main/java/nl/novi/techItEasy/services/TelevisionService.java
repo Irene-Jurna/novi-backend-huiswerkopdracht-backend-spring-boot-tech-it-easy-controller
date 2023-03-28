@@ -74,10 +74,6 @@ public class TelevisionService {
         }
     }
 
-    public void deleteTelevision(@RequestBody Long id) {
-        repos.deleteById(id);
-    }
-
     public TelevisionDto updateTelevision(Long id, TelevisionDto tvForUpdate) {
         Optional<Television> t = repos.findById(id);
         if (t.isEmpty()) {
@@ -88,6 +84,10 @@ public class TelevisionService {
             Television returnTelevision = repos.save(tv1);
             return televisionToDto(returnTelevision);
         }
+    }
+
+    public void deleteTelevision(@RequestBody Long id) {
+        repos.deleteById(id);
     }
 
     public void assignRemoteControllerToTelevision(Long id, Long remoteControllerId) {
@@ -193,5 +193,4 @@ public class TelevisionService {
         }
         return tv;
     }
-
 }
