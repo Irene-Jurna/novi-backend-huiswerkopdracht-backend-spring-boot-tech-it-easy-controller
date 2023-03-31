@@ -30,13 +30,18 @@ public class Television {
     private Integer sold;
 
     // Cascade komt uit EdHub H14, volgens mij zorgt dat ervoor dat je bij een delete ook de gerelateerde info delete
-    // In huiswerkles werd private voor de variabele gezet. In H14 niks (public?)
+    // In huiswerkles werd private voor de variabele gezet. In H14 niks (package private)
     @OneToOne(cascade = CascadeType.ALL)
     private RemoteController remote;
 
+    // Dit moet de owner kant van de relatie zijn (met foreign key in de database): @ManyToOne
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "ci_module_id")
+//    private CIModule ciModule;
     @OneToMany(mappedBy = "tv")
     private List<CIModule> ciModules;
 
+    // LazyCollection, JsonIgnore toevoegen. En het is een collectie, geen lijst?
     @OneToMany(mappedBy = "tv")
     private List<TelevisionsWallbrackets> tvWbList;
 
@@ -120,6 +125,18 @@ public class Television {
         return remote;
     }
 
+    public List<CIModule> getCiModules() {
+        return ciModules;
+    }
+
+    public List<TelevisionsWallbrackets> getTvWbList() {
+        return tvWbList;
+    }
+
+    public List<WallBracket> getWallBrackets() {
+        return wallBrackets;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -192,4 +209,15 @@ public class Television {
         this.remote = remote;
     }
 
+    public void setCiModules(List<CIModule> ciModules) {
+        this.ciModules = ciModules;
+    }
+
+    public void setTvWbList(List<TelevisionsWallbrackets> tvWbList) {
+        this.tvWbList = tvWbList;
+    }
+
+    public void setWallBrackets(List<WallBracket> wallBrackets) {
+        this.wallBrackets = wallBrackets;
+    }
 }

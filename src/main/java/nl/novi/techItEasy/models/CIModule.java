@@ -13,6 +13,10 @@ public class CIModule {
     private String type;
     private Double price;
 
+    // Deze relatie staat verkeerdom. Moet @OneToMany zijn
+//    @OneToMany(mappedBy = "ciModule")
+//    @JsonIgnore
+//    List<Television> televisions;
     @ManyToOne
     private Television tv;
 

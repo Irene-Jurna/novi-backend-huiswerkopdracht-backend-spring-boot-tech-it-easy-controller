@@ -97,6 +97,14 @@ public class TelevisionDto {
         return sold;
     }
 
+    public Long getRemoteId() {
+        return remoteId;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public void setType(String type) {
         this.type = type;
     }
@@ -161,4 +169,7 @@ public class TelevisionDto {
         this.sold = sold;
     }
 
+    public void setRemoteId(Long remoteId) {
+        this.remoteId = remoteId;
+    }
 }
