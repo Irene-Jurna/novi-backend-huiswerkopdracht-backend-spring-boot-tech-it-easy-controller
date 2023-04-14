@@ -1,6 +1,9 @@
 package nl.novi.techItEasy.models;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
+import jakarta.persistence.Table;
 
 import java.io.Serializable;
 

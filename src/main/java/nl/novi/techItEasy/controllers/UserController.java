@@ -1,9 +1,8 @@
 package nl.novi.techItEasy.controllers;
 
-import nl.novi.techiteasy1121.dtos.UserDto;
-import nl.novi.techiteasy1121.exceptions.BadRequestException;
-import nl.novi.techiteasy1121.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import nl.novi.techItEasy.dtos.UserDto;
+import nl.novi.techItEasy.exceptions.BadRequestException;
+import nl.novi.techItEasy.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -18,6 +17,11 @@ import java.util.Map;
 public class UserController {
 
     /*inject userService*/
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping(value = "")
     public ResponseEntity<List<UserDto>> getUsers() {

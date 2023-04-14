@@ -1,4 +1,7 @@
 package nl.novi.techItEasy.repositories;
 
-public interface UserRepository extends JpaRepository</*model*/, /*id*/> {
+import nl.novi.techItEasy.models.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UserRepository extends JpaRepository<User, String> {
 }

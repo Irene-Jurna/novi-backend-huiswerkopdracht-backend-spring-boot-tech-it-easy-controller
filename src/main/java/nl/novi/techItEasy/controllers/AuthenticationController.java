@@ -1,21 +1,39 @@
 package nl.novi.techItEasy.controllers;
 
+import nl.novi.techItEasy.dtos.AuthenticationRequest;
+import nl.novi.techItEasy.dtos.AuthenticationResponse;
+import nl.novi.techItEasy.services.CustomUserDetailsService;
+import nl.novi.techItEasy.utils.JwtUtil;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;package techiteasy1121.controllers;
+import java.security.Principal;
 
 @CrossOrigin
 @RestController
 public class AuthenticationController {
 
     /*inject authentionManager, userDetailService en jwtUtil*/
+    private final AuthenticationManager authenticationManager;
+    private final CustomUserDetailsService userDetailsService;
+    private final JwtUtil jwtUtil;
+
+    public AuthenticationController(AuthenticationManager authenticationManager, CustomUserDetailsService userDetailsService, JwtUtil jwtUtil) {
+        this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
+        this.jwtUtil = jwtUtil;
+    }
 
     /*
          Deze methode geeft de principal (basis user gegevens) terug van de ingelogde gebruiker
      */
     @GetMapping(value = "/authenticated")
+    // IJ: Authentication en Principal is Spring magic. Hoef je in Postman niet in te voegen, genereert Spring voor jou in de request
     public ResponseEntity<Object> authenticated(Authentication authentication, Principal principal) {
         return ResponseEntity.ok().body(principal);
     }

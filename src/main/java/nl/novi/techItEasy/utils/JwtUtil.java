@@ -1,18 +1,25 @@
 package nl.novi.techItEasy.utils;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 
 @Service
 public class JwtUtil {
 
     // De secret key moet minimaal 256 bits lang zijn, of grofweg 45 characters
-    private final static String SECRET_KEY = "/*vul hier je super geheime sleutel in*/";
+    private final static String SECRET_KEY = "7APJZlcIUbnh1IpSNTBMrvHp8Gjojjg6rK8J9MacRIcwDuxW1s6g1xTTwW6QCJoR";
 
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
@@ -51,7 +58,7 @@ public class JwtUtil {
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 10))
-                .signWith(getSigningKey() ,SignatureAlgorithm.HS256)
+                .signWith(getSigningKey() , SignatureAlgorithm.HS256)
                 .compact();
     }
 
