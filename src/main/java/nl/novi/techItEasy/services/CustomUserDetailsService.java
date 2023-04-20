@@ -2,13 +2,18 @@ package nl.novi.techItEasy.services;
 
 import nl.novi.techItEasy.dtos.UserDto;
 import nl.novi.techItEasy.models.Authority;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /*annotatie*/
+@SpringBootApplication
 public class CustomUserDetailsService implements UserDetailsService {
 
     /*inject userservice */

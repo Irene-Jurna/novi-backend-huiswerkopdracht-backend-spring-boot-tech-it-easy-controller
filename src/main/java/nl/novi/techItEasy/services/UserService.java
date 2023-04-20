@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /*moest hier niet een annotatie?*/
 @Service
@@ -56,7 +57,7 @@ public class UserService {
     }
 
     public void deleteUser(String username) {
-        /*repo*/.deleteById(username);
+        userRepos.deleteById(username);
     }
 
     public void updateUser(String username, UserDto newUser) {
@@ -67,22 +68,22 @@ public class UserService {
     }
 
     public Set<Authority> getAuthorities(String username) {
-        if (!/*repo*/.existsById(username)) throw new /*exception*/(username);
-        User user = /*repo*/.findById(username).get();
+        if (!userRepos.existsById(username)) throw new UsernameNotFoundException(username);
+        User user = userRepos.findById(username).get();
         UserDto userDto = fromUser(user);
         return userDto.getAuthorities();
     }
 
     public void addAuthority(String username, String authority) {
 
-        if (!userRepos.existsById(username)) throw new /*exception*/(username);
+        if (!userRepos.existsById(username)) throw new RecordNotFoundException(username);
         User user = userRepos.findById(username).get();
         user.addAuthority(new Authority(username, authority));
         userRepos.save(user);
     }
 
     public void removeAuthority(String username, String authority) {
-        if (!userRepos.existsById(username)) throw new /*exception*/(username);
+        if (!userRepos.existsById(username)) throw new RecordNotFoundException(username);
         User user = userRepos.findById(username).get();
         Authority authorityToRemove = user.getAuthorities().stream().filter((a) -> a.getAuthority().equalsIgnoreCase(authority)).findAny().get();
         user.removeAuthority(authorityToRemove);

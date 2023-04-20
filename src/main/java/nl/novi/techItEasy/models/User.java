@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /*annotatie*/
+@Entity
 @Table(name = "users")
 public class User {
 
@@ -16,6 +17,7 @@ public class User {
     @Column(nullable = false, length = 255)
     private String password;
 
+    // Zit niet in deze applicatie, dus is hier alleen maar opmaak (net als de apiKey eronder)
     @Column(nullable = false)
     private boolean enabled = true;
 
