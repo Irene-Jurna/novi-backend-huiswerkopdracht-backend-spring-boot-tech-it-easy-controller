@@ -16,6 +16,7 @@ public class WallBracket {
     private String name;
     private Double price;
 
+    // Dit is de makkelijke versie. Zit niet in de uitwerkingen
     @ManyToMany(mappedBy = "wallBrackets")
     private List<Television> tvs;
 
@@ -42,6 +43,14 @@ public class WallBracket {
         return price;
     }
 
+    public List<Television> getTvs() {
+        return tvs;
+    }
+
+    public List<TelevisionsWallbrackets> getTvWbList() {
+        return tvWbList;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -60,5 +69,13 @@ public class WallBracket {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public void setTvs(List<Television> tvs) {
+        this.tvs = tvs;
+    }
+
+    public void setTvWbList(List<TelevisionsWallbrackets> tvWbList) {
+        this.tvWbList = tvWbList;
     }
 }

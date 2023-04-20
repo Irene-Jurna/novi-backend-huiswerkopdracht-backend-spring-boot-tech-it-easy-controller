@@ -1,6 +1,7 @@
 package nl.novi.techItEasy.controllers;
 
 import jakarta.validation.Valid;
+import nl.novi.techItEasy.dtos.IdInputDto;
 import nl.novi.techItEasy.dtos.TelevisionDto;
 import nl.novi.techItEasy.models.Television;
 import nl.novi.techItEasy.services.TelevisionService;
@@ -55,4 +56,9 @@ public class TelevisionController {
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
+    @PutMapping("{id}/remote")
+    public ResponseEntity<Object> assignRemoteControllerToTelevision(@PathVariable("id") Long id, @Valid @RequestBody IdInputDto remoteId) {
+        service.assignRemoteControllerToTelevision(id, remoteId.id);
+        return ResponseEntity.noContent().build();
+    }
 }

@@ -26,4 +26,6 @@ public class ExceptionController {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    /*maak exceptionHandlers voor de 2 nieuwe exceptions*/
+
 }
