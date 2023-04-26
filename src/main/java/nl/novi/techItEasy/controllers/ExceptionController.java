@@ -1,8 +1,7 @@
 package nl.novi.techItEasy.controllers;
 
+import nl.novi.techItEasy.exceptions.*;
 import nl.novi.techItEasy.exceptions.IndexOutOfBoundsException;
-import nl.novi.techItEasy.exceptions.InvalidNameException;
-import nl.novi.techItEasy.exceptions.RecordNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -26,6 +25,13 @@ public class ExceptionController {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    /*maak exceptionHandlers voor de 2 nieuwe exceptions*/
+    @ExceptionHandler(value = UsernameNotFoundException.class)
+    public ResponseEntity<Object> exception(UsernameNotFoundException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
 
+    @ExceptionHandler(value = BadRequestException.class)
+    public ResponseEntity<Object> exception(BadRequestException exception) {
+        return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }

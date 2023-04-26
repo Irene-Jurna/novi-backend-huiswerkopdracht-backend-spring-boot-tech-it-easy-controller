@@ -41,6 +41,10 @@ public class Television {
     @OneToMany(mappedBy = "tv")
     private List<CIModule> ciModules;
 
+    // Uit eennalaatste huiswerkles
+    @ManyToOne
+    private CIModule ciModule;
+
     // LazyCollection, JsonIgnore toevoegen. En het is een collectie, geen lijst?
     @OneToMany(mappedBy = "tv")
     private List<TelevisionsWallbrackets> tvWbList;

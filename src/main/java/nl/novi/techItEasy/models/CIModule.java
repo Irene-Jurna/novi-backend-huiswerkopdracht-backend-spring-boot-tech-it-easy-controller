@@ -2,6 +2,8 @@ package nl.novi.techItEasy.models;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "ci-modules")
 public class CIModule {
@@ -13,10 +15,14 @@ public class CIModule {
     private String type;
     private Double price;
 
-    // Deze relatie staat verkeerdom. Moet @OneToMany zijn
 //    @OneToMany(mappedBy = "ciModule")
 //    @JsonIgnore
 //    List<Television> televisions;
+
+    // Uit eennalaatste huiswerkles
+    @OneToMany(mappedBy = "ciModule")
+    private List<Television> television;
+
     @ManyToOne
     private Television tv;
 
