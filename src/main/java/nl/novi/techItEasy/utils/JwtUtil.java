@@ -52,6 +52,7 @@ public class JwtUtil {
         return createToken(claims, userDetails.getUsername());
     }
 
+    // map, string, object is een soort dto
     private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims)

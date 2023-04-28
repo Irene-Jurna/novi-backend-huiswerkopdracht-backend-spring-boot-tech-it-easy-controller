@@ -18,7 +18,6 @@ import java.security.Principal;
 @RestController
 public class AuthenticationController {
 
-    /*inject authentionManager, userDetailService en jwtUtil*/
     private final AuthenticationManager authenticationManager;
     private final CustomUserDetailsService userDetailsService;
     private final JwtUtil jwtUtil;

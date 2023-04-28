@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -22,27 +21,23 @@ public class SpringSecurityConfig {
     /*inject customUserDetailService en jwtRequestFilter*/
     public final CustomUserDetailsService customUserDetailsService;
     private final JwtRequestFilter jwtRequestFilter;
+    private final PasswordEncoder passwordEncoder;
 
-    public SpringSecurityConfig(CustomUserDetailsService customUserDetailsService, JwtRequestFilter jwtRequestFilter) {
+    public SpringSecurityConfig(CustomUserDetailsService customUserDetailsService, JwtRequestFilter jwtRequestFilter, PasswordEncoder passwordEncoder) {
         this.customUserDetailsService = customUserDetailsService;
         this.jwtRequestFilter = jwtRequestFilter;
+        this.passwordEncoder = passwordEncoder;
     }
 
     // Authenticatie met customUserDetailsService en passwordEncoder
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        PasswordEncoderConfig passwordEncoderConfig = new PasswordEncoderConfig();
         return http.getSharedObject(AuthenticationManagerBuilder.class)
                 .userDetailsService(customUserDetailsService)
-                .passwordEncoder(passwordEncoder())
+                .passwordEncoder(passwordEncoder)
                 .and()
                 .build();
-    }
-
-    // PasswordEncoderBean. Deze kun je overal in je applicatie injecteren waar nodig.
-    // Je kunt dit ook in een aparte configuratie klasse zetten.
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
     // Authorizatie met jwt
@@ -59,13 +54,14 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.GET,"/users").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST,"/users/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
+                .requestMatchers("/authenticate").permitAll()
                 /*voeg de antmatchers toe voor admin(post en delete) en user (overige)*/
                 .requestMatchers("/authenticated").authenticated()
-                .requestMatchers("/authenticate").permitAll()/*allen dit punt mag toegankelijk zijn voor niet ingelogde gebruikers*/
                 .anyRequest().denyAll()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                // Spring security is een verzameling filters. Er zijn er meer, die kun je opzoeken.
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }

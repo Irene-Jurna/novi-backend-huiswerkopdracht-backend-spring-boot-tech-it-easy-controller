@@ -7,6 +7,7 @@ import nl.novi.techItEasy.models.Authority;
 import nl.novi.techItEasy.models.User;
 import nl.novi.techItEasy.repositories.UserRepository;
 import nl.novi.techItEasy.utils.RandomStringGenerator;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,15 +15,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-/*moest hier niet een annotatie?*/
 @Service
 public class UserService {
-    /*inject de juiste repository*/
 
     private final UserRepository userRepos;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepos) {
+    public UserService(UserRepository userRepos, PasswordEncoder passwordEncoder) {
         this.userRepos = userRepos;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<UserDto> getUsers() {
@@ -52,6 +53,8 @@ public class UserService {
     public String createUser(UserDto userDto) {
         String randomString = RandomStringGenerator.generateAlphaNumeric(20);
         userDto.setApikey(randomString);
+        String encryptedPassword = passwordEncoder.encode(userDto.password);
+        userDto.setPassword(encryptedPassword);
         User newUser = userRepos.save(toUser(userDto));
         return newUser.getUsername();
     }
