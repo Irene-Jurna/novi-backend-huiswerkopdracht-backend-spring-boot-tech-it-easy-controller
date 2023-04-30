@@ -48,7 +48,9 @@ public class JwtUtil {
     }
 
     public String generateToken(UserDetails userDetails) {
+        // Nu lege hashmap. Kun je ook de rollen meegeven. Of voornaam van gebruiker. Kun je iets met een string aan de map toevoegen met claims.put. Handig om toe te voegen als je gebruikers in frontend wil authoriseren.
         Map<String, Object> claims = new HashMap<>();
+//        claims.put("firstname", "Mark");
         return createToken(claims, userDetails.getUsername());
     }
 

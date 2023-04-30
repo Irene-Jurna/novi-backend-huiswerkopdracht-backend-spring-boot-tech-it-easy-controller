@@ -18,7 +18,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SpringSecurityConfig {
 
-    /*inject customUserDetailService en jwtRequestFilter*/
     public final CustomUserDetailsService customUserDetailsService;
     private final JwtRequestFilter jwtRequestFilter;
     private final PasswordEncoder passwordEncoder;
@@ -54,9 +53,9 @@ public class SpringSecurityConfig {
                 .requestMatchers(HttpMethod.GET,"/users").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST,"/users/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
-                .requestMatchers("/authenticate").permitAll()
-                /*voeg de antmatchers toe voor admin(post en delete) en user (overige)*/
+                .requestMatchers("/cimodules", "/remotes", "/wallbrackets", "/televisions", "/televisions/**").hasAnyRole("ADMIN", "USER")
                 .requestMatchers("/authenticated").authenticated()
+                .requestMatchers("/authenticate").permitAll()
                 .anyRequest().denyAll()
                 .and()
                 .sessionManagement()

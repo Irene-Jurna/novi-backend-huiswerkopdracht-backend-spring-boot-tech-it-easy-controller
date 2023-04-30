@@ -53,6 +53,7 @@ public class UserService {
     public String createUser(UserDto userDto) {
         String randomString = RandomStringGenerator.generateAlphaNumeric(20);
         userDto.setApikey(randomString);
+        // Of moet dit getpassword zijn?
         String encryptedPassword = passwordEncoder.encode(userDto.password);
         userDto.setPassword(encryptedPassword);
         User newUser = userRepos.save(toUser(userDto));

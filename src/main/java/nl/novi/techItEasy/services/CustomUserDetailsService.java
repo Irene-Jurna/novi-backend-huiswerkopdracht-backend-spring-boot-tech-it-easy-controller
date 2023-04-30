@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-/*annotatie*/
+// In deze klasse niet veel spannends. Klasse implementeert de interface UserDetailsService. Die heeft alleen een loadUserByUserName. Wel belangrijk, want deze wordt in onze security gebruikt.
+
 @SpringBootApplication
 public class CustomUserDetailsService implements UserDetailsService {
 
-    /*inject userservice */
-    // IJ: moet dit geen repository zijn?
+    // Hier zou je ook de userRepository kunnen gebruiken. Misschien nog beter/ netter. Maar dit werkt ook. En dan krijg je een User terug waarmee je kunt werken. Nu werken we met een userDto.
     private final UserService userService;
 
     public CustomUserDetailsService(UserService userService) {
@@ -33,9 +33,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         Set<Authority> authorities = userDto.getAuthorities();
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
         for (Authority authority: authorities) {
+            // GrantedAuthorities zijn gewoon je authorities, maar dan in een herkenbaar jasje voor Spring Security
             grantedAuthorities.add(new SimpleGrantedAuthority(authority.getAuthority()));
         }
 
+        // Hier wordt de userdetails gemaakt
+        // Je kunt hier ook je eigen userDetails implementeren, en niet core gebruiken
         return new org.springframework.security.core.userdetails.User(username, password, grantedAuthorities);
     }
 

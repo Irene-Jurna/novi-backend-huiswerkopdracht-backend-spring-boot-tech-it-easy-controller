@@ -19,10 +19,9 @@ public class RemoteControllerService {
         this.repos = repos;
     }
 
-    public Long createRemoteController(RemoteControllerDto rDto) {
+    public RemoteControllerDto createRemoteController(RemoteControllerDto rDto) {
         RemoteController remote = dtoToRemoteController(rDto);
         repos.save(remote);
-        return rDto.getId();
     }
 
     public List<RemoteControllerDto> getRemotes() {
@@ -57,8 +56,18 @@ public class RemoteControllerService {
         }
     }
 
-    public void deleteRemote(@RequestBody Long id) {
-        repos.deleteById(id);
+//    public void deleteRemote(@RequestBody Long id) {
+//        repos.deleteById(id);
+//    }
+
+    public Boolean deleteRemote(Long id) {
+        if(repos.existsById(id)) {
+            repos.deleteById(id);
+            //return true als het deleten is geslaagd
+            return true;
+        }
+        //return false als het id niet in de DB staat en het deleten dus niet is geslaagd.
+        return false;
     }
 
     public RemoteControllerDto remoteControllerToDto(RemoteController rc) {

@@ -15,7 +15,7 @@ public class TelevisionInputDto {
     @Size(max = 20, message = "Name must be between 0-20 characters")
     public String name;
 
-    @Positive
+    @Positive(message="Price must be higher than zero")
     public Double price;
 
     @Size(min=1, max=1000)
@@ -31,7 +31,7 @@ public class TelevisionInputDto {
     public Boolean bluetooth;
     public Boolean ambiLight;
 
-    @PositiveOrZero
+    @PositiveOrZero(message="Television cannot have negative stock")
     public Integer originalStock;
 
     @Min(value=0)

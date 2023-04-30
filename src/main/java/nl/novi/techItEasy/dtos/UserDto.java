@@ -14,6 +14,7 @@ public class UserDto {
     public String email;
     @JsonSerialize
     public Set<Authority> authorities;
+//    public boolean isAdmin;
 
     public String getUsername() {
         return username;

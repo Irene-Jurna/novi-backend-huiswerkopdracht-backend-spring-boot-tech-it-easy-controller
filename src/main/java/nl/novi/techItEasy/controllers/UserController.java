@@ -11,12 +11,11 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin
+//@CrossOrigin
 @RestController
 @RequestMapping(value = "/users")
 public class UserController {
 
-    /*inject userService*/
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -36,13 +35,14 @@ public class UserController {
 
         UserDto optionalUser = userService.getUser(username);
 
-
         return ResponseEntity.ok().body(optionalUser);
 
     }
 
     @PostMapping(value = "")
-    public ResponseEntity<UserDto> createKlant(@RequestBody UserDto dto) {;
+    // Namen Engels maken
+    public ResponseEntity<UserDto> createKlant(@RequestBody UserDto dto) {
+        ;
 
         String newUsername = userService.createUser(dto);
         userService.addAuthority(newUsername, "ROLE_USER");
@@ -78,8 +78,7 @@ public class UserController {
             String authorityName = (String) fields.get("authority");
             userService.addAuthority(username, authorityName);
             return ResponseEntity.noContent().build();
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw new BadRequestException();
         }
     }
@@ -89,5 +88,4 @@ public class UserController {
         userService.removeAuthority(username, authority);
         return ResponseEntity.noContent().build();
     }
-
 }
